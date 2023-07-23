@@ -3,20 +3,31 @@ var searchvalue="harry";
 var sub=document.getElementById("submited");
 sub.addEventListener('click',submited);
 makepage();
+var total_Pages;
 var cur_page=1;
 
 function submited(e){
     console.log('submit');
     e.preventDefault();
+    cur_page=1;
     makepage();
 }
 function makepage(){
     // e.preventDe  fault();
+    // cur_page=1;
     searchvalue=document.getElementById("search").value;
     console.log("hi"+searchvalue);
     if(searchvalue==""){  console.log("hi"); searchvalue="house";}
-    displayPage(1);
-    fetch("https://www.omdbapi.com/?apikey=3ea15b8a&s="+searchvalue).then(response => response.json()).then(data => {if(data.hasOwnProperty("Search")){generatePaginationLinks((data.totalResults)/10);} else{console.log("no movie found")}});
+    displayPage(cur_page);
+    fetch("https://www.omdbapi.com/?apikey=3ea15b8a&s="+searchvalue).then(response => response.json()).then(data => {if(data.hasOwnProperty("Search")){ total_Pages=(data.totalResults)/10;  generatePaginationLinks(total_Pages);} 
+    else{
+        console.log(data.Error);
+        var x=document.createElement("div");
+        x.className="error";
+        x.textContent=data.Error;
+        list.innerHTML="";
+        list.appendChild(x);
+    }});
 }
 function create_movie_element(movie)
 {
@@ -78,6 +89,12 @@ function generatePaginationLinks(totalPages) {
     paginationContainer.innerHTML = "";
     var lowerbound=Math.max(1,cur_page-5);
     if(lowerbound+5>totalPages) lowerbound=Math.max(1,lowerbound-5);
+
+    var previous_but=document.createElement("button");
+    previous_but.textContent="previous";
+    previous_but.onclick=prev_but;
+    paginationContainer.appendChild(previous_but);
+
     for (let i = lowerbound; i <= Math.min(lowerbound+10,totalPages); i++) {
         const link = document.createElement("a");
         link.href = "#";
@@ -90,8 +107,34 @@ function generatePaginationLinks(totalPages) {
         });
         paginationContainer.appendChild(link);
     }
+    var next_but=document.createElement("button");
+    next_but.textContent="next";
+    next_but.onclick=next_button;
+    paginationContainer.appendChild(next_but);
+
 }
 
+function prev_but(e)
+{
+    e.preventDefault();
+    console.log("prev");
+    if(cur_page!=1)
+    {
+        cur_page--;
+        makepage();
+    }
+}
+
+function next_button(e)
+{
+    console.log("next")
+    e.preventDefault();
+    if(cur_page!=total_Pages)
+    {
+        cur_page++;
+        makepage();
+    }
+}
 
 // {"Title":"Dude, Where's My Car?","Year":"2000","imdbID":"tt0242423","Type":"movie",
 // "Poster":"https://m.media-amazon.com/images/M/MV5BNzRmN2NjNzktOWE1My00NjVlLWFhNjYtZmFkMzM5YTA2ZTFlXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg"}
