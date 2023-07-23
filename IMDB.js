@@ -45,6 +45,8 @@ function create_movie_element(movie)
     type.className="type";
 
     var detail= document.createElement("button");
+    detail.onclick=detailclick;
+    detail.id=movie.imdbID;
     detail.textContent="details";
     detail.className="details";
     
@@ -56,6 +58,13 @@ function create_movie_element(movie)
 
     div.appendChild(sidediv);
     list.appendChild(div);
+}
+function detailclick(e)
+{
+    e.preventDefault();
+    console.log("imdb id" + e.target.id);
+    window.location.href = 'detail.html?param='+encodeURIComponent(e.target.id);
+
 }
 
 function displayPage(page_no) {
@@ -73,7 +82,7 @@ function generatePaginationLinks(totalPages) {
         const link = document.createElement("a");
         link.href = "#";
         link.textContent = i;
-        link.className="page_link"
+        // link.className="page_link"
         link.addEventListener("click", () => {
             cur_page=i;
             displayPage(i);
