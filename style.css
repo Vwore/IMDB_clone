@@ -1,0 +1,33 @@
+
+.movie_div{
+    display: flex;
+    padding: 20px;
+}
+
+.movietitle{
+    
+}
+
+.sidediv{
+
+}
+.year{
+
+}
+.type{
+
+}
+.details{
+
+}
+.image{
+    height: 300px;
+    padding-right: 10px;
+}
+.movielist{
+    display: flex;
+    flex-wrap: wrap;
+}
+.page_link{
+    margin: 2px;
+}
